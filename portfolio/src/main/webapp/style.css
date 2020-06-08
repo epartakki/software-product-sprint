@@ -4,6 +4,10 @@
   width: 650px;
 }
 
+body {
+  background-color: rgba(248, 238, 97, 0.753);
+}
+
 #greeting-container {
   margin-top: 20px;
 }
