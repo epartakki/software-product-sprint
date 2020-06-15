@@ -43,8 +43,8 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-  //  String greeting = greeting.get((int) (Math.random() * greeting.size()));
-
+   
+    Gson gson = new Gson();
     String json = convertToJson(greeting);
 
     // Send the JSON as the response
@@ -55,11 +55,42 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println("<h1>Hello Eleni!</h1>");
   }
 
-   private String convertToJson(ServerStats serverStats) {
-    String json = "{";
-    json += { "cheese":"Halloumi", "best": "grilled", "age":1 };
-    json += "}";
-    return json;
+
+@Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    String text = getParameter(request, "text-input", "");
+    boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
+    boolean sort = Boolean.parseBoolean(getParameter(request, "sort", "false"));
+
+    // Convert the text to upper case.
+    if (upperCase) {
+      text = text.toUpperCase();
+    }
+
+    // Break the text into individual words.
+    String[] words = text.split("\\s*,\\s*");
+
+    // Sort the words.
+    if (sort) {
+      Arrays.sort(words);
+    }
+
+    // Respond with the result.
+    response.setContentType("text/html;");
+    response.getWriter().println(Arrays.toString(words));
+  }
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 
 }

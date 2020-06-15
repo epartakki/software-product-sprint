@@ -16,6 +16,10 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
+
+    fetch("/data").then(response => response.json()).then(resp => {
+        console.log(resp);
+    })
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
@@ -23,6 +27,13 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+
+
+
+
+
+
 
 function getRandomGreeting() {
   console.log('Fetching a random greeting.');
@@ -55,6 +66,9 @@ function getData() {
     const statsListElement = document.getElementById('data-container');
     statsListElement.innerHTML = '';
   });
-}
 
+
+ 
+
+}
 
