@@ -43,8 +43,24 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  //  String greeting = greeting.get((int) (Math.random() * greeting.size()));
+
+    String json = convertToJson(greeting);
+
+    // Send the JSON as the response
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
+
     response.setContentType("text/html;");
     response.getWriter().println("<h1>Hello Eleni!</h1>");
   }
+
+   private String convertToJson(ServerStats serverStats) {
+    String json = "{";
+    json += { "cheese":"Halloumi", "best": "grilled", "age":1 };
+    json += "}";
+    return json;
+  }
+
 }
 

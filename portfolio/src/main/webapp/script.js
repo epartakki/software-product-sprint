@@ -46,3 +46,15 @@ function addGreetingToDom(greeting) {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = quote;
 }
+
+function getData() {
+  fetch('/data').then(response => response.json()).then((greeting) => {
+    // stats is an object, not a string, so we have to
+    // reference its fields to create HTML content
+
+    const statsListElement = document.getElementById('data-container');
+    statsListElement.innerHTML = '';
+  });
+}
+
+
