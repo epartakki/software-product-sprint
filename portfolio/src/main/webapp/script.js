@@ -16,9 +16,6 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['Halloumi', 'Mozzarella', 'Camembert', 'Roquefort', 'Feta', 'Manouri', 'Anari'];
-
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
@@ -30,7 +27,7 @@ function addRandomGreeting() {
 function getRandomGreeting() {
   console.log('Fetching a random greeting.');
 
-  const responsePromise = fetch('/random-greeting');
+  const responsePromise = fetch('/data');
 
   responsePromise.then(handleResponse);
 }
