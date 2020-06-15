@@ -2,17 +2,51 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Eleni Partakki - Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
   <body>
     <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
+      <h1>Eleni Partakki - Portfolio</h1>
+
+      <img src="/images/Eleni.png" alt="Hey, I am Eleni!" class="center" width="200"
+         height="210">
+         
+        </img>
+      <p>This is the Portfolio I have made during Google SPS 2020.</p>
+      <p>A first-generation international undergraduate student from Cyprus
+           and Romania at Smith College with a double major in Government and 
+           Computer Science. With extensive transferable and interpersonal 
+           skills combined with enthusiasm for technology, international 
+           development, politics, and finance, I use my innate desire to 
+           create community to help institutions grow, advance and develop 
+           while working with data and software.</p>
+      <p>Let me greet you:</p>
+      <button onclick="addRandomGreeting()">This is a Greet Button</button>
       <div id="greeting-container"></div>
+      <p>
+          <a href="https://www.linkedin.com/in/elenipartakki/">LinkedIn</a>
+          </p>
+        <p>
+          <a href="https://github.com/cookiemonsterleni">GitHub</a>
+          </p>
+          <p>
+            If you are interested in how I got to college, 
+          <a href="https://www.smith.edu/about-smith/giving/profile/eleni-partakki">check this out</a>
+        </p>
+
+    <form action="/data" method="POST">
+        <p>
+            <h2>Comments</h2>
+            <div id="comments-container"></div>
+            <br/><br/>
+            <textarea name="text-input"></textarea>
+            <input type="submit" />
+        </p>
+    </form>
+
     </div>
+         
   </body>
 </html>
