@@ -15,17 +15,33 @@
 /**
  * Adds a random greeting to the page.
  */
+
+var prevQuoteNum = 0;
+
 function addRandomGreeting() {
+const greeting =
+      ['“And how are you?” --Winnie-The-Pooh',
+       '“Good Morning! Good Afternoon! Good Night! These are not just mere greetings. They are powerful blessings, setting the best vibration for the day. Hence, whether it is morning, afternoon or night, make sure that you say your greeting right!” --Franco Santoro',
+       '“May we greet each other with a smile, hug and speak kind words.” --Lailah Gifty Akita'];
+       
+      var newGreetingNum = Math.floor(Math.random() * greeting.length);
 
-    fetch("/data").then(response => response.json()).then(resp => {
-        console.log(resp);
-    })
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+if (newGreetingNum == prevQuoteNum) {
+    ++newGreetingNum;
+    newGreetingNum %= greeting.length;
+}     
 
-  // Add it to the page.
+
   const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  greetingContainer.innerText = greeting[newGreetingNum];
+  prevGreetingNum = newGreetingNum;
+}
+
+async function getComments() {
+  const response = await fetch('/data');
+  const commentsList = await response.text();
+  const commentsListElement = document.getElementById('comments-container')
+  commentsListElement.innerText = commentsList;
 }
 
 

@@ -14,6 +14,13 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +34,13 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
     
     private List<String> greeting;
+    Gson gson;
+    DatastoreService datastore;
+
+    public DataServlet() {
+        gson = new Gson();
+        datastore = DatastoreServiceFactory.getDatastoreService();
+        }
 
 
     @Override
@@ -41,44 +55,53 @@ public class DataServlet extends HttpServlet {
     greeting.add("Manouri");
   }
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-   
-    Gson gson = new Gson();
-    String json = convertToJson(greeting);
+    @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {  
+    // Get comments from Datastore and show on the page.
+    ArrayList<String> messages = new ArrayList<String>();
+    Query query = new Query("Comment").addSort("text", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
 
-    // Send the JSON as the response
+    for (Entity entity : results.asIterable()) {
+        String comment = (String) entity.getProperty("text");
+        messages.add(comment);
+    }
+
+    String json = convertToJsonUsingGson(messages);
     response.setContentType("application/json;");
     response.getWriter().println(json);
 
-    response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello Eleni!</h1>");
+    //task 5
+    String title = request.getParameter("title");
+    long timestamp = System.currentTimeMillis();
+
+    Entity taskEntity = new Entity("Task");
+    taskEntity.setProperty("title", title);
+    taskEntity.setProperty("timestamp", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(taskEntity);
+
+    response.sendRedirect("/index.html");
   }
+
+
 
 
 @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the form.
-    String text = getParameter(request, "text-input", "");
-    boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
-    boolean sort = Boolean.parseBoolean(getParameter(request, "sort", "false"));
+    // Get the comment input from the form.
+    String comment = getParameter(request, "text-input", "");
 
-    // Convert the text to upper case.
-    if (upperCase) {
-      text = text.toUpperCase();
+    // Add the comment to Datastore.
+    if (!comment.equals("")) {
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("text", comment);
+        datastore.put(commentEntity);
     }
 
-    // Break the text into individual words.
-    String[] words = text.split("\\s*,\\s*");
-
-    // Sort the words.
-    if (sort) {
-      Arrays.sort(words);
-    }
-
-    // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println(Arrays.toString(words));
+    // Redirect back to the main page.
+    response.sendRedirect("/index.html");
   }
 
   /**
@@ -92,6 +115,12 @@ public class DataServlet extends HttpServlet {
     }
     return value;
   }
+
+ private String convertToJsonUsingGson(ArrayList<String> listOfStrings) {
+    String json = gson.toJson(listOfStrings);
+    return json;
+  }
+
 
 }
 
